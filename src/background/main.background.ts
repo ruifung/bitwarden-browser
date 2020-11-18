@@ -26,6 +26,7 @@ import { ExportService } from 'jslib/services/export.service';
 import { NotificationsService } from 'jslib/services/notifications.service';
 import { PolicyService } from 'jslib/services/policy.service';
 import { SearchService } from 'jslib/services/search.service';
+import { SendService } from 'jslib/services/send.service';
 import { SystemService } from 'jslib/services/system.service';
 import { WebCryptoFunctionService } from 'jslib/services/webCryptoFunction.service';
 
@@ -58,6 +59,7 @@ import { ExportService as ExportServiceAbstraction } from 'jslib/abstractions/ex
 import { NotificationsService as NotificationsServiceAbstraction } from 'jslib/abstractions/notifications.service';
 import { PolicyService as PolicyServiceAbstraction } from 'jslib/abstractions/policy.service';
 import { SearchService as SearchServiceAbstraction } from 'jslib/abstractions/search.service';
+import { SendService as SendServiceAbstraction } from 'jslib/abstractions/send.service';
 import { SystemService as SystemServiceAbstraction } from 'jslib/abstractions/system.service';
 
 import { Analytics } from 'jslib/misc';
@@ -117,6 +119,7 @@ export default class MainBackground {
     systemService: SystemServiceAbstraction;
     eventService: EventServiceAbstraction;
     policyService: PolicyServiceAbstraction;
+    sendService: SendServiceAbstraction;
     analytics: Analytics;
     popupUtilsService: PopupUtilsService;
 
@@ -194,10 +197,12 @@ export default class MainBackground {
                     await this.systemService.clearPendingClipboard();
                 }
             }, async () => await this.logout(false));
+        this.sendService = new SendService(this.cryptoService, this.userService, this.apiService,
+            this.storageService, this.i18nService, this.cryptoFunctionService);
         this.syncService = new SyncService(this.userService, this.apiService, this.settingsService,
             this.folderService, this.cipherService, this.cryptoService, this.collectionService,
             this.storageService, this.messagingService, this.policyService,
-            async (expired: boolean) => await this.logout(expired));
+            this.sendService, async (expired: boolean) => await this.logout(expired));
         this.eventService = new EventService(this.storageService, this.apiService, this.userService,
             this.cipherService);
         this.passwordGenerationService = new PasswordGenerationService(this.cryptoService, this.storageService,
