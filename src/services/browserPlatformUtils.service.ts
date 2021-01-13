@@ -27,9 +27,7 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
             return this.deviceCache;
         }
 
-        if (navigator.userAgent.indexOf(' Safari/') !== -1) {
-            this.deviceCache = DeviceType.SafariExtension;
-        } else if (navigator.userAgent.indexOf(' Firefox/') !== -1 || navigator.userAgent.indexOf(' Gecko/') !== -1) {
+        if (navigator.userAgent.indexOf(' Firefox/') !== -1 || navigator.userAgent.indexOf(' Gecko/') !== -1) {
             this.deviceCache = DeviceType.FirefoxExtension;
         } else if ((!!(window as any).opr && !!opr.addons) || !!(window as any).opera ||
             navigator.userAgent.indexOf(' OPR/') >= 0) {
@@ -40,6 +38,8 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
             this.deviceCache = DeviceType.VivaldiExtension;
         } else if ((window as any).chrome && navigator.userAgent.indexOf(' Chrome/') !== -1) {
             this.deviceCache = DeviceType.ChromeExtension;
+        } else if (navigator.userAgent.indexOf(' Safari/') !== -1) {
+            this.deviceCache = DeviceType.SafariExtension;
         }
 
         return this.deviceCache;
