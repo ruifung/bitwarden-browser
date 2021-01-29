@@ -65,7 +65,6 @@ function dist(browserName, manifest) {
 function distFirefox() {
     return dist('firefox', (manifest) => {
         delete manifest.content_security_policy;
-        delete manifest.optional_permissions;
         removeShortcuts(manifest);
         return manifest;
     });
@@ -76,6 +75,7 @@ function distOpera() {
         delete manifest.applications;
         delete manifest.content_security_policy;
         removeShortcuts(manifest);
+        moveNativeMessagingToOptional(manifest);
         return manifest;
     });
 }
@@ -86,6 +86,7 @@ function distChrome() {
         delete manifest.content_security_policy;
         delete manifest.sidebar_action;
         delete manifest.commands._execute_sidebar_action;
+        moveNativeMessagingToOptional(manifest);
         return manifest;
     });
 }
@@ -96,6 +97,7 @@ function distEdge() {
         delete manifest.content_security_policy;
         delete manifest.sidebar_action;
         delete manifest.commands._execute_sidebar_action;
+        moveNativeMessagingToOptional(manifest);
         return manifest;
     });
 }
@@ -107,6 +109,14 @@ function removeShortcuts(manifest) {
             manifest.content_scripts.splice(1, 1);
         }
     }
+}
+
+function moveNativeMessagingToOptional(manifest) {
+    const index = manifest.permissions.indexOf("nativeMessaging");
+    index > -1 ? manifest.permissions.splice(index, 1) : false
+    manifest.optional_permissions = [
+        "nativeMessaging"
+    ];
 }
 
 function distSafariMas(cb) {
