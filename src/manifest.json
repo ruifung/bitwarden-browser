@@ -129,7 +129,7 @@
   ],
   "applications": {
     "gecko": {
-      "id": "{446900e4-71c2-419f-a6a7-df9c091e268b}",
+      "id": "{67e3f761-0616-4300-82aa-799a9d10abcc}",
       "strict_min_version": "42.0"
     }
   },
